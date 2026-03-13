@@ -1,0 +1,97 @@
+# =============================================================================
+# Docker Compose Configuration
+# =============================================================================
+#
+# WHAT IS THIS FILE?
+# Docker Compose lets you define and run multiple containers with one command.
+# Instead of manually running `docker run postgres...` with many flags,
+# you define everything here and just run `docker-compose up`.
+#
+# HOW TO USE:
+#   Start all services:    docker-compose up
+#   Start in background:   docker-compose up -d
+#   Stop all services:     docker-compose down
+#   View logs:             docker-compose logs -f
+#   Rebuild after changes: docker-compose up --build
+#
+# =============================================================================
+# -----------------------------------------------------------------------------
+# SERVICES
+# -----------------------------------------------------------------------------
+# Each service becomes a container. Services can communicate with each other
+# using their service name as hostname (e.g., 'postgres' instead of 'localhost')
+# -----------------------------------------------------------------------------
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mer_db
+    # Environment variables configure PostgreSQL on first startup
+    # The ${VAR} syntax reads from .env file
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}         # Database superuser name
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Superuser password
+      POSTGRES_DB: ${POSTGRES_DB}             # Database created on startup
+    ports:
+      - "${POSTGRES_PORT}:5432"               # HOST_PORT:CONTAINER_PORT
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Health check - verifies PostgreSQL is accepting connections
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  # ---------------------------------------------------------------------------
+  # Server (Node.js + Fastify)
+  # ---------------------------------------------------------------------------
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: mer_server
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${SERVER_PORT}
+      # 'postgres' is the service name - Docker resolves it to the container's IP
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    # -------------------------------------------------------------------------
+    # Volume Mounts (for hot-reloading)
+    # -------------------------------------------------------------------------
+    # Format: HOST_PATH:CONTAINER_PATH
+    #
+    # These "bind mounts" sync your local files into the container:
+    # - Edit code on your Mac → instantly reflected in container
+    # - No need to rebuild image after code changes
+    #
+    # Why only src?
+    # - node_modules stays inside container (installed during build)
+    # - Avoids Mac/Linux compatibility issues with native modules
+    # -------------------------------------------------------------------------
+    volumes:
+      - ./server/src:/server/src
+      - /server/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+  # ---------------------------------------------------------------------------
+  # Client (React + Vite)
+  # ---------------------------------------------------------------------------
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: mer_client
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    volumes:
+      - ./client/src:/client/src
+      - ./client/index.html:/client/index.html
+      - /client/node_modules
+volumes:
+  postgres_data:
