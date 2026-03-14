@@ -50,9 +50,9 @@ services:
       context: ./server
       dockerfile: Dockerfile
     container_name: mer_server
+    env_file:
+      - ./server/.env
     environment:
-      NODE_ENV: ${NODE_ENV}
-      PORT: ${SERVER_PORT}
       # 'postgres' is the service name - Docker resolves it to the container's IP
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
     ports:
@@ -84,9 +84,8 @@ services:
       context: ./client
       dockerfile: Dockerfile
     container_name: mer_client
-    environment:
-      NODE_ENV: ${NODE_ENV}
-      VITE_API_URL: ${VITE_API_URL}
+    env_file:
+      - ./client/.env
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     volumes:
