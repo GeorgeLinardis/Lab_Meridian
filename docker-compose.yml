@@ -54,7 +54,10 @@ services:
       - ./server/.env
     environment:
       # 'postgres' is the service name - Docker resolves it to the container's IP
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${SERVER_PORT}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      CLIENT_URL: ${CLIENT_URL}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     # -------------------------------------------------------------------------
@@ -72,7 +75,6 @@ services:
     # -------------------------------------------------------------------------
     volumes:
       - ./server/src:/server/src
-      - /server/node_modules
     depends_on:
       postgres:
         condition: service_healthy
@@ -86,11 +88,14 @@ services:
     container_name: mer_client
     env_file:
       - ./client/.env
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      VITE_SERVER_URL: ${SERVER_URL}
+      PORT: ${CLIENT_PORT}
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     volumes:
       - ./client/src:/client/src
       - ./client/index.html:/client/index.html
-      - /client/node_modules
 volumes:
   postgres_data:

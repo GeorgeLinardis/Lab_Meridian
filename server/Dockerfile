@@ -26,4 +26,4 @@ COPY . .
 EXPOSE 3001
 
 # Use Bun directly for development
-CMD ["bun", "run", "dev"]
+CMD ["tail", "-f", "/dev/null"]
