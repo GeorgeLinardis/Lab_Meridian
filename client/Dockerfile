@@ -16,4 +16,4 @@ COPY . .
 
 EXPOSE 5173
 
-CMD ["bun", "run", "dev", "--", "--host"]
+CMD ["tail", "-f", "/dev/null"]
