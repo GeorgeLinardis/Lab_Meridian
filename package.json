@@ -17,5 +17,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "ioredis": "^5.10.0"
   }
 }
