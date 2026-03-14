@@ -43,6 +43,19 @@ services:
       retries: 5
       start_period: 10s
   # ---------------------------------------------------------------------------
+  # Redis (Cache & Queues)
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: mer_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  # ---------------------------------------------------------------------------
   # Server (Node.js + Fastify)
   # ---------------------------------------------------------------------------
   server:
@@ -58,6 +71,7 @@ services:
       PORT: ${SERVER_PORT}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
       CLIENT_URL: ${CLIENT_URL}
+      REDIS_URL: ${REDIS_URL}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     # -------------------------------------------------------------------------
@@ -77,6 +91,8 @@ services:
       - ./server/src:/server/src
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
   # ---------------------------------------------------------------------------
   # Client (React + Vite)
