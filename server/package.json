@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "build": "tsc ."
+    "build": "tsc"
   },
   "peerDependencies": {
     "typescript": "^5"
