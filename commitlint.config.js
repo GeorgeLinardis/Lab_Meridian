@@ -17,6 +17,7 @@
  * | fix      | Bug fix                                    |
  * | docs     | Documentation only changes                 |
  * | refactor | Code change (no new feature or bug fix)    |
+ * | cleanup  | Remove dead code, unused deps, files       |
  * | test     | Adding or updating tests                   |
  * | infra    | Docker, config, deps, env, tooling         |
  * ─────────────────────────────────────────────────────────
@@ -29,6 +30,7 @@ module.exports = {
       'fix',
       'docs',
       'refactor',
+      'cleanup',
       'test',
       'infra',
     ]],

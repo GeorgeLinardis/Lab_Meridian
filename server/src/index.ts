@@ -1,8 +1,12 @@
 import app from './app';
-import redis, { connectRedis } from './services/redis.ts';
+import { connectRedis } from './services/redis.ts';
 
 
 
+/**
+ * Starts the Fastify server and connects to Redis.
+ * Exits the process if either fails.
+ */
 const start = async (): Promise<void> => {
   try {
     await app.listen({ port: Number(process.env.PORT) || 3001, host: '0.0.0.0' });

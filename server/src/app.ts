@@ -6,6 +6,10 @@ import type { ApiResponse } from "./types/api.ts";
 
 const app: FastifyInstance = Fastify({ logger: IS_DEV });
 
+/**
+ * Resolves whether an incoming origin is allowed.
+ * In dev, all origins are permitted. In production, only CLIENT_URL is whitelisted.
+ */
 await app.register(cors, {
   origin: (origin: string | undefined, cb) => {
     if (IS_DEV) {
@@ -21,6 +25,10 @@ await app.register(cors, {
   }
 });
 
+/**
+ * Health check endpoint.
+ * @returns Current server status and timestamp.
+ */
 app.get('/server/health', async (): Promise<ApiResponse<{ status: string, timestamp: string }>> => {
   return { success: true, data: { status: 'ok', timestamp: new Date().toISOString() } };
 });

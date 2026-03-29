@@ -45,3 +45,5 @@ npm-debug.log*
 *.sqlite3
 
 docs/
+CLAUDE.md
+.claude

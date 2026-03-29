@@ -2,6 +2,10 @@ import Redis from 'ioredis';
 
 const client = new Redis(process.env.REDIS_URL!);
 
+/**
+ * Verifies the Redis connection by sending a PING.
+ * Exits the process if the connection fails.
+ */
 export const connectRedis = async (): Promise<void> => {
   try {
     await client.ping();
