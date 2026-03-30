@@ -7,26 +7,26 @@ on:
       - '**'
 
 jobs:
-  lint-client:
-    name: 'Client: Lint checks'
+  setup-client:
+    name: 'Setup client'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: client
     steps:
-      - name: Checkout git repo
-        uses: actions/checkout@v5
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v2
-      - name: Install dependencies
-        run: bun install
-      - name: Run linting check
-        run: bun run lint
-      - name: Build app
-        run: bun run build
-
-  lint-server:
-    name: 'Server: Lint checks'
+    - name: Checkout git repo
+      uses: actions/checkout@v5
+    - name: Setup bun
+      uses: oven-sh/setup-bun@v2
+    - name: Install dependencies
+      run: bun install
+    - name: Cache client node_modules
+      uses: actions/cache@v4
+      with:
+        path: client/node_modules
+        key: client-node-modules-${{ hashFiles('client/bun.lock') }}
+  setup-server:
+    name: 'Setup server'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,5 +42,76 @@ jobs:
         run: bun run db:generate
         env:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+      - name: Cache server node_modules
+        uses: actions/cache@v4
+        with:
+          path: server/node_modules
+          key: server-node-modules-${{ hashFiles('server/bun.lock') }}
+      - name: Cache generated Prisma client
+        uses: actions/cache@v4
+        with:
+          path: server/src/generated
+          key: prisma-client-${{ hashFiles('server/prisma/schema.prisma') }}
+  client-lint-check:
+    name: 'Client: Lint checks'
+    runs-on: ubuntu-latest
+    needs: setup-client
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v5
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+      - name: Restore client node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: client/node_modules
+          key: client-node-modules-${{ hashFiles('client/bun.lock') }}
+      - name: Run linting check
+        run: bun run lint
+      - name: Build app
+        run: bun run build
+
+  client-tests:
+    name: 'Client: Tests'
+    runs-on: ubuntu-latest
+    needs: setup-client
+    steps:
+      - name: Run tests
+        run: echo "No tests yet"
+
+  server-tests:
+    name: 'Server: Tests'
+    runs-on: ubuntu-latest
+    needs: setup-server
+    steps:
+      - name: Run tests
+        run: echo "No tests yet"
+
+  server-lint-check:
+    name: 'Server: Lint checks'
+    runs-on: ubuntu-latest
+    needs: setup-server
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v5
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+      - name: Restore server node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: server/node_modules
+          key: server-node-modules-${{ hashFiles('server/bun.lock') }}
+      - name: Restore generated Prisma client cache
+        uses: actions/cache@v4
+        with:
+          path: server/src/generated
+          key: prisma-client-${{ hashFiles('server/prisma/schema.prisma') }}
       - name: Build server
         run: bun run build
+
