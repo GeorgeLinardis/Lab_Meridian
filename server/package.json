@@ -4,18 +4,22 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prisma": "^7.6.0"
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "db:migrate": "bun --bun run prisma migrate dev",
+    "db:generate": "bun --bun run prisma generate"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
-    "fastify": "^5.8.2",
+    "@prisma/client": "^7.6.0",
+    "fastify": "5.8.4",
     "ioredis": "^5.10.0"
   }
 }
