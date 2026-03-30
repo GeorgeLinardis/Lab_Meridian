@@ -38,5 +38,7 @@ jobs:
         run: bun install
       - name: Generate Prisma client
         run: bun run db:generate
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
       - name: Build server
         run: bun run build
