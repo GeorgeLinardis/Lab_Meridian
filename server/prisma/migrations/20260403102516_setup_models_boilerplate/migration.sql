@@ -5,6 +5,17 @@ CREATE TYPE "TransactionType" AS ENUM ('INCOME', 'EXPENSE');
 CREATE TYPE "AccountType" AS ENUM ('ASSET', 'CASH', 'SAVINGS', 'INVESTMENT');
 
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Profile" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
@@ -88,6 +99,9 @@ CREATE TABLE "NetWorthSnapshot" (
 
     CONSTRAINT "NetWorthSnapshot_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_username_key" ON "Profile"("username");

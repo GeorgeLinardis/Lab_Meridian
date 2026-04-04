@@ -29,7 +29,7 @@ AI Layer          ░░░░░░░░░░░░░░░░░░░░  
 | Layer | Tech |
 |---|---|
 | Client | React 19, Vite, TypeScript, Tailwind CSS |
-| Server | Bun, Fastify, TypeScript |
+| Server | Node.js, NestJS, TypeScript |
 | Database | PostgreSQL (Prisma), MongoDB (Mongoose) |
 | Cache / Queues | Redis, BullMQ |
 | Infra | Docker Compose, GitHub Actions CI |
@@ -54,7 +54,7 @@ AI Layer          ░░░░░░░░░░░░░░░░░░░░  
 ```
 /
 ├── client/               # React frontend
-├── server/               # Fastify API
+├── server/               # NestJS API
 ├── docker-compose.yml
 └── .env.example
 ```

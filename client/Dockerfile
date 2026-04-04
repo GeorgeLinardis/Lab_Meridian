@@ -1,16 +1,10 @@
 FROM node:24.13.0-alpine
 
-RUN apk add --no-cache curl bash
-
-RUN curl -fsSL https://bun.sh/install | bash
-
-ENV PATH="/root/.bun/bin:$PATH"
-
 WORKDIR /client
 
-COPY package.json bun.lock* ./
+COPY package.json package-lock.json ./
 
-RUN bun install
+RUN npm install
 
 COPY . .
 

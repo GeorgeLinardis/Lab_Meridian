@@ -11,5 +11,5 @@ React frontend running on port 5173.
 ## Dev
 
 ```bash
-bun run dev   # start with hot reload
+npm run dev   # start with hot reload
 ```

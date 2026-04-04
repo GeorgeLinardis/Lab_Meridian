@@ -16,15 +16,18 @@ jobs:
     steps:
     - name: Checkout git repo
       uses: actions/checkout@v5
-    - name: Setup bun
-      uses: oven-sh/setup-bun@v2
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
     - name: Install dependencies
-      run: bun install
+      run: npm install
     - name: Cache client node_modules
       uses: actions/cache@v4
       with:
         path: client/node_modules
-        key: client-node-modules-${{ hashFiles('client/bun.lock') }}
+        key: client-node-modules-${{ hashFiles('client/package-lock.json') }}
+
   setup-server:
     name: 'Setup server'
     runs-on: ubuntu-latest
@@ -34,24 +37,27 @@ jobs:
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v5
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Install dependencies
-        run: bun install
+        run: npm install
       - name: Generate Prisma client
-        run: bun run db:generate
+        run: npm run db:generate
         env:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
       - name: Cache server node_modules
         uses: actions/cache@v4
         with:
           path: server/node_modules
-          key: server-node-modules-${{ hashFiles('server/bun.lock') }}
+          key: server-node-modules-${{ hashFiles('server/package-lock.json') }}
       - name: Cache generated Prisma client
         uses: actions/cache@v4
         with:
           path: server/src/generated
           key: prisma-client-${{ hashFiles('server/prisma/schema.prisma') }}
+
   client-lint-check:
     name: 'Client: Lint checks'
     runs-on: ubuntu-latest
@@ -62,17 +68,19 @@ jobs:
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v5
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Restore client node_modules cache
         uses: actions/cache@v4
         with:
           path: client/node_modules
-          key: client-node-modules-${{ hashFiles('client/bun.lock') }}
+          key: client-node-modules-${{ hashFiles('client/package-lock.json') }}
       - name: Run linting check
-        run: bun run lint
+        run: npm run lint
       - name: Build app
-        run: bun run build
+        run: npm run build
 
   client-tests:
     name: 'Client: Tests'
@@ -85,10 +93,29 @@ jobs:
   server-tests:
     name: 'Server: Tests'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
     needs: setup-server
     steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v5
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Restore server node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: server/node_modules
+          key: server-node-modules-${{ hashFiles('server/package-lock.json') }}
+      - name: Restore generated Prisma client cache
+        uses: actions/cache@v4
+        with:
+          path: server/src/generated
+          key: prisma-client-${{ hashFiles('server/prisma/schema.prisma') }}
       - name: Run tests
-        run: echo "No tests yet"
+        run: npm run test
 
   server-lint-check:
     name: 'Server: Lint checks'
@@ -100,18 +127,19 @@ jobs:
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v5
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Restore server node_modules cache
         uses: actions/cache@v4
         with:
           path: server/node_modules
-          key: server-node-modules-${{ hashFiles('server/bun.lock') }}
+          key: server-node-modules-${{ hashFiles('server/package-lock.json') }}
       - name: Restore generated Prisma client cache
         uses: actions/cache@v4
         with:
           path: server/src/generated
           key: prisma-client-${{ hashFiles('server/prisma/schema.prisma') }}
       - name: Build server
-        run: bun run build
-
+        run: npm run build
