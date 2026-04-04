@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class RedisService {
-  private client: Redis;
+  private client!: Redis;
   private readonly logger = new Logger(RedisService.name);
 
   async onModuleInit(): Promise<void> {
