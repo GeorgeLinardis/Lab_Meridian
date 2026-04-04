@@ -25,7 +25,7 @@ jobs:
         cache: 'npm'
         cache-dependency-path: client/package-lock.json
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
   setup-server:
     name: 'Setup server'
@@ -43,7 +43,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package-lock.json
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+      - name: Install NestJS CLI
+        run: npm install -g @nestjs/cli@11
       - name: Generate Prisma client
         run: npm run db:generate
         env:
@@ -71,7 +73,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: client/package-lock.json
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run linting check
         run: npm run lint
       - name: Build app
@@ -102,7 +104,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package-lock.json
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Restore generated Prisma client cache
         uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:
@@ -128,7 +130,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package-lock.json
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+      - name: Install NestJS CLI
+        run: npm install -g @nestjs/cli@11
       - name: Restore generated Prisma client cache
         uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:
