@@ -89,6 +89,9 @@ services:
     # -------------------------------------------------------------------------
     volumes:
       - ./server/src:/server/src
+      - ./server/eslint.config.mjs:/server/eslint.config.mjs
+      - ./server/tsconfig.json:/server/tsconfig.json
+      - ./server/tsconfig.build.json:/server/tsconfig.build.json
     depends_on:
       postgres:
         condition: service_healthy

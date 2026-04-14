@@ -23,6 +23,6 @@ export class RedisService {
     }
   }
   onModuleDestroy(): void {
-    this.client.quit();
+    void this.client.quit();
   }
 }

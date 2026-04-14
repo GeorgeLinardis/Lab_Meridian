@@ -138,5 +138,7 @@ jobs:
         with:
           path: server/src/generated
           key: prisma-client-${{ hashFiles('server/prisma/schema.prisma') }}
+      - name: Run linting check
+        run: npm run lint
       - name: Build server
         run: npm run build
