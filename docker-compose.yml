@@ -99,7 +99,7 @@ services:
       redis:
         condition: service_healthy
   # ---------------------------------------------------------------------------
-  # Client (React + Vite)
+  # Client (Next.js)
   # ---------------------------------------------------------------------------
   client:
     build:
@@ -110,12 +110,15 @@ services:
       - ./client/.env
     environment:
       NODE_ENV: ${NODE_ENV}
-      VITE_SERVER_URL: ${SERVER_URL}
+      NEXT_PUBLIC_API_URL: ${SERVER_URL}
       PORT: ${CLIENT_PORT}
+      # Required for hot reload to work inside Docker on macOS
+      WATCHPACK_POLLING: "true"
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     volumes:
       - ./client/src:/client/src
-      - ./client/index.html:/client/index.html
+      - ./client/next.config.ts:/client/next.config.ts
+      - ./client/tsconfig.json:/client/tsconfig.json
 volumes:
   postgres_data:

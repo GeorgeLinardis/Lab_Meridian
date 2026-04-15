@@ -28,12 +28,13 @@ AI Layer          ░░░░░░░░░░░░░░░░░░░░  
 
 | Layer | Tech |
 |---|---|
-| Client | React 19, Vite, TypeScript, Tailwind CSS |
+| Web Client | Next.js 15, React 19, TypeScript, Tailwind CSS |
 | Server | Node.js, NestJS, TypeScript |
+| Mobile | React Native (planned) |
 | Database | PostgreSQL (Prisma), MongoDB (Mongoose) |
 | Cache / Queues | Redis, BullMQ |
+| AI | Python, FastAPI, Ollama, LangChain (planned) |
 | Infra | Docker Compose, GitHub Actions CI |
-| LLM | Ollama (local) |
 
 ---
 
@@ -53,8 +54,10 @@ AI Layer          ░░░░░░░░░░░░░░░░░░░░  
 
 ```
 /
-├── client/               # React frontend
+├── client/               # Next.js web frontend
 ├── server/               # NestJS API
+├── mobile/               # React Native app (planned)
+├── ai/                   # Python AI service (planned)
 ├── docker-compose.yml
 └── .env.example
 ```

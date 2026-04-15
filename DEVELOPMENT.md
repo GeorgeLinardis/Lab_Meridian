@@ -9,7 +9,7 @@ Quick reference for local development.
 | PostgreSQL | mer_db     | 5432  |
 | Redis      | mer_redis   | 6379 |
 | Server     | mer_server | 3001  |
-| Client     | mer_client | 5173  |
+| Client     | mer_client | 3000  |
 
 ---
 
