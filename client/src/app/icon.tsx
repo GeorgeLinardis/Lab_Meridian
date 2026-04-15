@@ -4,12 +4,13 @@ export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
 export default function Icon() {
+  const { width, height } = size;
   return new ImageResponse(
     (
       <div
         style={{
-          width: 32,
-          height: 32,
+          width,
+          height,
           borderRadius: 8,
           background: "#0F172A",
           display: "flex",
@@ -17,56 +18,14 @@ export default function Icon() {
           justifyContent: "center",
         }}
       >
-        {/* Rotated diamond split into two triangles */}
-        <div style={{ position: "relative", width: 18, height: 18, display: "flex" }}>
-          {/* Top-left triangle */}
-          <div
-            style={{
-              position: "absolute",
-              width: 0,
-              height: 0,
-              borderStyle: "solid",
-              borderWidth: "9px 9px 0 0",
-              borderColor: "#22C55E transparent transparent transparent",
-            }}
-          />
-          {/* Bottom-right triangle */}
-          <div
-            style={{
-              position: "absolute",
-              width: 0,
-              height: 0,
-              borderStyle: "solid",
-              borderWidth: "0 0 9px 9px",
-              borderColor: "transparent transparent #15803D transparent",
-              top: 9,
-              left: 9,
-            }}
-          />
-          {/* Top-right triangle (accent) */}
-          <div
-            style={{
-              position: "absolute",
-              width: 0,
-              height: 0,
-              borderStyle: "solid",
-              borderWidth: "0 9px 9px 0",
-              borderColor: "transparent #166534 transparent transparent",
-            }}
-          />
-          {/* Bottom-left triangle (accent) */}
-          <div
-            style={{
-              position: "absolute",
-              width: 0,
-              height: 0,
-              borderStyle: "solid",
-              borderWidth: "9px 0 0 9px",
-              borderColor: "transparent transparent transparent #14532D",
-              top: 9,
-            }}
-          />
-        </div>
+        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none">
+          {/* Outer glow arc */}
+          <path d="M5,22 A11,11 0 0,1 27,22" stroke="#92400E" strokeWidth="1.5" strokeLinecap="round"/>
+          {/* Sun */}
+          <path d="M8,22 A8,8 0 0,1 24,22 Z" fill="#F59E0B"/>
+          {/* Horizon */}
+          <line x1="2" y1="22" x2="30" y2="22" stroke="#64748B" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
       </div>
     ),
     { ...size },
