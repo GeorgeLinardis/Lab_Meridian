@@ -1,13 +1,19 @@
 import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import CustomExceptionFilter from './exception-filter/exception.filter';
 import ResponseInterceptor from './interceptor/response.interceptor';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
-  app.enableCors({ origin: process.env.CLIENT_URL });
+  app.setGlobalPrefix('api/v1');
+  // allow cross origin communication between server and client
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  });
+  app.use(cookieParser());
   app.useGlobalFilters(new CustomExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalPipes(
@@ -18,6 +24,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, () => {
+    Logger.log(`App listening on port ${process.env.PORT}`);
+  });
 }
 void bootstrap();

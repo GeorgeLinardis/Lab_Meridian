@@ -1,7 +1,2 @@
-export const APP_NAME = 'Meridian';
-
-export const GUEST_USER = {
-  name: "User",
-  avatar: "",
-  email: "",
-};
+export const APP_NAME = "Meridian";
+export const COOKIE_ACCESS_TOKEN_NAME = 'access_token';

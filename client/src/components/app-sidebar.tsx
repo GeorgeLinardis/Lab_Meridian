@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { LayoutDashboardIcon, WalletIcon, LineChartIcon, FlaskConicalIcon } from "lucide-react"
+import * as React from 'react';
+import { FlaskConicalIcon, LayoutDashboardIcon, LineChartIcon, WalletIcon } from 'lucide-react';
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
-import MeridianIcon from "@/components/MeridianIcon"
-import { APP_NAME, GUEST_USER } from "@/constants"
+import { NavMain } from '@/components/nav-main';
+import { NavUser } from '@/components/nav-user';
+import MeridianIcon from '@/components/meridian-icon';
+import { APP_NAME } from '@/constants';
 import {
   Sidebar,
   SidebarContent,
@@ -16,14 +16,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 const navItems = [
-  { title: "Dashboard", url: "#", icon: <LayoutDashboardIcon />, isActive: true },
-  { title: "Accounts",  url: "#", icon: <WalletIcon /> },
+  {
+    title: "Dashboard",
+    url: "#",
+    icon: <LayoutDashboardIcon />,
+    isActive: true,
+  },
+  { title: "Accounts", url: "#", icon: <WalletIcon /> },
   { title: "Portfolio", url: "#", icon: <LineChartIcon /> },
-  { title: "Simulation",url: "#", icon: <FlaskConicalIcon /> },
-]
+  { title: "Simulation", url: "#", icon: <FlaskConicalIcon /> },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -31,9 +36,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" className="[&_svg]:size-8">
+            <SidebarMenuButton size="lg" className="[&_svg]:size-8 hover:bg-transparent active:bg-transparent pointer-events-none">
               <MeridianIcon size={32} />
-              <span className="text-base font-semibold">{APP_NAME}</span>
+              <span className="text-base font-semibold translate-y-1">
+                {APP_NAME}
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -42,9 +49,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={navItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={GUEST_USER} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

@@ -1,10 +1,5 @@
-"use client"
+"use client";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,43 +7,43 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar"
-import { User, ChevronsUpDownIcon, SettingsIcon, LogOutIcon } from "lucide-react"
+} from '@/components/ui/dropdown-menu';
+import axios from '@/lib/axios';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import { ChevronsUpDownIcon, LogOutIcon, SettingsIcon, User } from 'lucide-react';
+import { API } from '@/api-urls';
+import { ROUTES } from '@/routes';
+import { useRouter } from 'next/navigation';
 
 export function NavUser({
   user,
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
+  // TODO optional remove when implemented
+  user?: {
+    name?: string;
+    email?: string;
+    avatar?: string;
+  };
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
+  const router = useRouter();
+  async function handleLogout() {
+    await axios.post(API.AUTH.LOGOUT);
+    router.push(ROUTES.LOGIN);
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />
+              <SidebarMenuButton size="default" className="hover:bg-[oklch(0.93_0.04_280)] aria-expanded:bg-[oklch(0.93_0.04_280)]" />
             }
           >
-            <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>
-                <User className="size-4" />
-              </AvatarFallback>
-            </Avatar>
+            <User className="size-4 shrink-0" />
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
+              <span className="truncate font-medium">{user?.name}</span>
+              <span className="truncate text-xs">{user?.email}</span>
             </div>
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
@@ -59,13 +54,13 @@ export function NavUser({
             sideOffset={14}
           >
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-[oklch(0.93_0.04_280)] focus:bg-[oklch(0.93_0.04_280)]">
                 <SettingsIcon />
                 Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-[oklch(0.93_0.04_280)] focus:bg-[oklch(0.93_0.04_280)]" onClick={handleLogout}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>
@@ -73,5 +68,5 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
