@@ -9,6 +9,14 @@
 
 ---
 
+## Screenshots
+
+| Login | Dashboard |
+|-------|-----------|
+| <img src="assets/screenshots/login-page.png" alt="Login page" width="400" /> | <img src="assets/screenshots/dashboard.png" alt="Dashboard" width="400" /> |
+
+---
+
 ## What is Meridian?
 
 Meridian is a full-stack personal finance application that brings together account aggregation, transaction tracking, investment monitoring, and forward-looking simulations into a single dashboard. A local AI layer provides contextual insights based on your full financial picture.
