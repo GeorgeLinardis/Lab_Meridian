@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { COOKIE_ACCESS_TOKEN_NAME } from '@/constants';
-import { ROUTES } from '@/routes';
+import { PUBLIC_ROUTES, ROUTES } from '@/routes';
 
 /**
  * Decodes the JWT payload and checks whether the token has expired.
@@ -26,7 +26,7 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get(COOKIE_ACCESS_TOKEN_NAME)?.value;
   const isAuthenticated = token && !isTokenExpired(token);
 
-  if (!isAuthenticated && request.nextUrl.pathname !== ROUTES.LOGIN) {
+  if (!isAuthenticated && !PUBLIC_ROUTES.includes(request.nextUrl.pathname)) {
     return NextResponse.redirect(new URL(ROUTES.LOGIN, request.url));
   }
 
